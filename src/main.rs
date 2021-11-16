@@ -15,7 +15,7 @@ fn main() {
         Err(e) => panic!("Problem opening file: {}", e),
     });
 
-    let reg_line_split = Regex::new(r"(^\s*)([#]*\s?)(.*)").expect("Error when creating Regex");
+    let reg_line_split = Regex::new(r"(^\s*)([#]*\s?)(.*)").expect("Error when creating Regex"); // TODO: add markdown 'operators' into regex
 
     for (line_index, r_line) in file.lines().enumerate() {
         let line = match r_line {
