@@ -12,18 +12,18 @@ A converter for your markdown files 📁 => 📂
 
 Following [Markdown Guide](https://www.markdownguide.org/basic-syntax/#paragraphs-1)
 
-- [ ] Headings (#)
-- [ ] Paragraphs (NADDA)
+- [x] Headings (#)
+- [x] Paragraphs (NADDA)
 - [ ] Line Breaks (is it a paragraph? replace new line with \<br> tag)
 - [ ] Emphasis (\*)
-  - [ ] bold (\*\*blah\*\* OR \_\_blah\_\_)
-  - [ ] italic (\*blah\* OR \_blah\_)
+  - [x] bold (\*\*blah\*\* OR \_\_blah\_\_)
+  - [x] italic (\*blah\* OR \_blah\_)
   - [ ] underline (\*\*\*blah**_ OR \_\_\_blah\_\_\_ OR \_\_\*blah_\__ OR \*\*\_blah_**)
-  - [ ] cross-through
+  - [x] cross-through
 - [ ] Blockquotes (line prefaced by \>) -> support indents for nested
 - [ ] Lists -> support indents for nested
   - [ ] Unordered (- OR \* OR +)
-  - [ ] Ordered (numbered lists)
+  - [x] Ordered (numbered lists)
 - [ ] Code
   - [ ] Inline (\`)
   - [ ] Block (prepended by 4 spaces)
