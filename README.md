@@ -1,4 +1,4 @@
-# MaRust
+# Must (M~~arkdown~~ ~~r~~UST)
 
 A converter for your markdown files 📁 => 📂
 
