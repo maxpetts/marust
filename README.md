@@ -34,3 +34,4 @@ Following [Markdown Guide](https://www.markdownguide.org/basic-syntax/#paragraph
 - [ ] Math
 - [ ] Inline html
   - [ ] XSS protection? etc; but images..
+- [ ] Handle escape characters (\\)
