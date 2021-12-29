@@ -1,19 +1,26 @@
 use regex::Regex;
 use std::{
     fs::File,
-    io::{BufRead, BufReader},
+    io::{BufRead, BufReader, BufWriter, Write},
 };
 
 fn main() {
     // TODO: use canonicalize function to get a safe path to file
 
-    let in_filename = "test_files/fulldoc.md";
-    let out_filename = "out/heading.html";
-    let debug = false;
+    let in_filename = "test_files/list.md";
+    let out_filename = "fulldoc.html";
+    let debug = true;
 
     let file = BufReader::new(match File::open(in_filename) {
         Ok(file) => file,
         Err(e) => panic!("Problem opening file: {}", e),
+    });
+
+    // TODO: Only use a BufWriter when file sizes are medium-large
+    // Should we use a line writer instead?
+    let mut out_file = BufWriter::new(match File::create(out_filename) {
+        Ok(file) => file,
+        Err(e) => panic!("Error creating file: {}", e),
     });
 
     let mut iter = file.lines().enumerate().peekable();
@@ -46,14 +53,29 @@ fn main() {
             }
 
             match mkd_ops {
-                "" => println!("{}", text),
-                "_" => println!("<em>{}", text.replacen("_", "</em>", 1)),
-                "**" => println!("<b>{}", text.replacen("**", "</b>", 1)),
-                "`" => println!("<code>{}", text.replacen("`", "</code>", 1)),
-                "~~" => println!("<s>{}", text.replacen("~~", "</s>", 1)),
+                "" => output(out_file.by_ref(), format!("{}", text)),
+                "_" => output(
+                    out_file.by_ref(),
+                    format!("<em>{}", text.replacen("_", "</em>", 1)),
+                ),
+                "**" => output(
+                    out_file.by_ref(),
+                    format!("<b>{}", text.replacen("**", "</b>", 1)),
+                ),
+                "`" => output(
+                    out_file.by_ref(),
+                    format!("<code>{}", text.replacen("`", "</code>", 1)),
+                ),
+                "~~" => output(
+                    out_file.by_ref(),
+                    format!("<s>{}", text.replacen("~~", "</s>", 1)),
+                ),
                 &_ => {
                     if mkd_ops.contains("#") {
-                        println!("<h{len}>{}</h{len}>", text, len = mkd_ops.len());
+                        output(
+                            out_file.by_ref(),
+                            format!("<h{len}>{}</h{len}>", text, len = mkd_ops.len()),
+                        );
                     } else if mkd_ops.chars().any(char::is_numeric) {
                         let next_line = if let Some(line) = iter.peek() {
                             match &line.1 {
@@ -68,21 +90,29 @@ fn main() {
                         };
 
                         if next_line == "" {
-                            println!("<li>{}</li></ol>", text);
+                            output(out_file.by_ref(), format!("<li>{}</li></ol>", text));
+                        } else if mkd_ops == "1." {
+                            // LISTS START AT ONE
+                            output(out_file.by_ref(), format!("<ol><li>{}</li>", text));
                         } else {
-                            if mkd_ops == "1." {
-                                println!("<ol><li>{}</li>", text);
-                            } else {
-                                println!("<li>{}</li>", text);
-                            }
+                            output(out_file.by_ref(), format!("<li>{}</li>", text));
                         }
                     } else {
-                        println!("ERROR in markdown / not implemented :)");
+                        output(
+                            out_file.by_ref(),
+                            "error in markdwon/ not implemented".to_string(),
+                        );
+                        // output(out_file, format!("ERROR in markdown / not implemented :)"));
                     }
                 }
             }
         } else {
-            println!();
+            output(out_file.by_ref(), "<br>".to_string())
         }
     }
+    out_file.flush().unwrap();
+}
+
+fn output<W: Write>(buffer: &mut W, content: String) {
+    buffer.write(content.as_bytes()).unwrap();
 }
