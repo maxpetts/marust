@@ -35,3 +35,7 @@ Following [Markdown Guide](https://www.markdownguide.org/basic-syntax/#paragraph
 - [ ] Inline html
   - [ ] XSS protection? etc; but images..
 - [ ] Handle escape characters (\\)
+
+## Similar projects
+
+- Python-Markdown : https://github.com/Python-Markdown/markdown
